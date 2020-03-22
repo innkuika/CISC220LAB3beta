@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/bgb">
+        <file>bgb.png</file>
+        <file>../bgo.png</file>
+    </qresource>
+</RCC>
