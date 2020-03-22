@@ -1,11 +1,11 @@
-#include <QMainWindow>
+#include "QMainWindow"
 #include "logic.h"
 #include <QPixmap>
 #include "clickableBt.h"
 #include "ui_gameplay.h"
 #include "QtCore"
 #include "QtGui"
-#include <QMessageBox>
+#include "QMessageBox"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class gameplay; }
