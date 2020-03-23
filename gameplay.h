@@ -17,10 +17,21 @@ class gameplay : public QMainWindow
 
 public:
     GameBoard *gb;
+
 public:
     bool getNum = false;
 
+public:
+    bool personMouseClicked = false;
 
+public:
+    int personx;
+
+public:
+    int persony;
+
+public:
+    bool placepieceperson(GameBoard *game);
 
 public:
     gameplay(QWidget *parent = nullptr);
@@ -42,7 +53,7 @@ public:
     void setGameboard(GameBoard *gb);
 
 public:
-    void printBoard2(char arr[], int ct, int size);
+    void printBoard2(char arr[], int ct, int size, int row);
 
 public:
     void printBoard(GameBoard *game, int ct);
@@ -56,9 +67,12 @@ public:
 public:
     void emptyAllBox();
 
+
+
 private slots:
     void on_bt_clicked();
     void on_bt_2_clicked();
+    void labelclicked();
 
 public:
     void playGame(bool fp1, bool fp2, GameBoard *game, bool whoplaysfirstflag);

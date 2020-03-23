@@ -4,6 +4,7 @@
 #include <QFileDialog>
 #include <QObject>
 
+
 gameplay::gameplay(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::gameplay)
@@ -17,6 +18,7 @@ gameplay::gameplay(QWidget *parent)
     ui->horizontalLayout_6->setSizeConstraint(QLayout::SizeConstraint(3));
     ui->horizontalLayout_7->setSizeConstraint(QLayout::SizeConstraint(3));
     ui->horizontalLayout_8->setSizeConstraint(QLayout::SizeConstraint(3));
+
 
 }
 
@@ -67,9 +69,18 @@ void delay()
     while (QTime::currentTime() < dieTime)
         QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
 }
+
+void gameplay::labelclicked(){
+    CClickableLabel* ccl = qobject_cast<CClickableLabel*>(sender());
+    this->personx = ccl->x;
+    this->persony = ccl->y;
+    this->personMouseClicked = true;
+
+}
+
 void gameplay::on_bt_clicked()
 {
-    QMessageBox :: information(this, "title", "hi");
+    QMessageBox :: information(this, "title", "0 player");
     deleteIntro();
 
     this->gb->playerNum = 0;
@@ -79,14 +90,14 @@ void gameplay::on_bt_clicked()
 
 void gameplay::on_bt_2_clicked()
 {
-    QMessageBox :: information(this, "title", "hi2");
+    QMessageBox :: information(this, "title", "1 player");
     deleteIntro();
 
     this->gb->playerNum = 1;
     this->play(this->gb);
 }
 
-void gameplay::printBoard2(char arr[], int ct, int size) {
+void gameplay::printBoard2(char arr[], int ct, int size, int row) {
     if (ct == size) {
         return;
     } else {
@@ -95,7 +106,8 @@ void gameplay::printBoard2(char arr[], int ct, int size) {
         else if(arr[ct] == 'O')filename =  ":/bgo/bgo.png";
         else if(arr[ct] == 'X') filename =  ":/bgx/bgx.png";
 
-        CClickableLabel *ccl =  new CClickableLabel(filename,this);
+        CClickableLabel *ccl =  new CClickableLabel(filename,row,ct,this);
+        connect(ccl , SIGNAL(clicked()), this, SLOT(labelclicked()));
         QImage image;
         image.load(filename);
         if(ct == 0)
@@ -115,23 +127,68 @@ void gameplay::printBoard2(char arr[], int ct, int size) {
         if(ct == 7)
         ui->horizontalLayout_8->addWidget(ccl);
 
-
-
         ccl->setPixmap(QPixmap::fromImage(image));
         ccl->show();
-        return printBoard2(arr, ct += 1, size);
+        return printBoard2(arr, ct += 1, size, row);
     }
 
 }
 
 void gameplay::printBoard(GameBoard *game, int ct) {
-        cout<<"test"<<endl;
     if (ct == game->size) {
         return;
     } else {
-        printBoard2(game->board[ct], 0, game->size);
+        printBoard2(game->board[ct], 0, game->size, ct);
         return printBoard(game, ct += 1);
     }
+}
+
+
+bool gameplay::placepieceperson(GameBoard *game) {
+    int dash = countSquare(game, '-', game->size, 0, 0);
+    if (dash == 0) {
+        return false;
+    }
+    int x = 0;
+    int y = 0;
+    delay();
+
+    while(!this->personMouseClicked){
+        QApplication::processEvents();
+
+    }
+
+    x = this->personx;
+    y = this->persony;
+
+    //reset temp var to initial condition
+    this->personMouseClicked = false;
+    this->personx = 0;
+    this->persony = 0;
+
+
+
+//    cout << game->p << " Enter the x coordinate: " << endl;
+//    cin >> x;
+//    cout << game->p << " Enter the y coordinate: " << endl;
+//    cin >> y;
+
+    if (x < 0 || x >= game->size || y < 0 || y >= game->size
+            || game->board[x][y] != '-') {
+        cout << game->p << " forfeits turn" << endl;
+        return false;
+    }
+    int num = flipPieceNum(game, x, y, true);
+    cout << num << endl;
+
+    if (num == 0) {
+        cout << game->p << " forfeits turn" << endl;
+        return false;
+    } else {
+
+        return true;
+    }
+
 }
 
 int gameplay::play(GameBoard *game) {
@@ -187,19 +244,23 @@ void gameplay::playGame(bool fp1, bool fp2, GameBoard *game, bool whoplaysfirstf
     if (fp1 && fp2 && (s1 || s2)) {
         if (whoplaysfirstflag) {
             game->p = 'X';
+            delay();
             s1 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
             game->p = 'O';
+            delay();
             s2 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
         } else {
             game->p = 'O';
+            delay();
             s1 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
             game->p = 'X';
+            delay();
             s2 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
@@ -218,19 +279,23 @@ void gameplay::playGame(bool fp1, bool fp2, GameBoard *game, bool whoplaysfirstf
     } else {
         if (whoplaysfirstflag) {
             game->p = 'X';
+            delay();
             s1 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
             game->p = 'O';
+            delay();
             s2 = compplacepiece(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
         } else {
             game->p = 'X';
+            delay();
             s1 = compplacepiece(game);
             this->emptyAllBox();
             this->printBoard(game, 0);
             game->p = 'O';
+            delay();
             s2 = placepieceperson(game);
             this->emptyAllBox();
             this->printBoard(game, 0);

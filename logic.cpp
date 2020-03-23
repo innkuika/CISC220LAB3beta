@@ -299,35 +299,6 @@ int flipPieceNum(GameBoard *game, int x, int y, bool flipflag) {
     return num;
 }
 
-bool placepieceperson(GameBoard *game) {
-    int dash = countSquare(game, '-', game->size, 0, 0);
-    if (dash == 0) {
-        return false;
-    }
-    int x;
-    int y;
-    cout << game->p << " Enter the x coordinate: " << endl;
-    cin >> x;
-    cout << game->p << " Enter the y coordinate: " << endl;
-    cin >> y;
-
-    if (x < 0 || x >= game->size || y < 0 || y >= game->size
-            || game->board[x][y] != '-') {
-        cout << game->p << " forfeits turn" << endl;
-        return false;
-    }
-    int num = flipPieceNum(game, x, y, true);
-    cout << num << endl;
-
-    if (num == 0) {
-        cout << game->p << " forfeits turn" << endl;
-        return false;
-    } else {
-
-        return true;
-    }
-
-}
 
 int countRow(char arr[], char c, int size, int ct, int num) {
     if (ct == size) {
