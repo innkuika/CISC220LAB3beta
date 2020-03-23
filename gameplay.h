@@ -74,6 +74,8 @@ private slots:
     void on_bt_2_clicked();
     void labelclicked();
 
+    void on_bt_3_clicked();
+
 public:
     void playGame(bool fp1, bool fp2, GameBoard *game, bool whoplaysfirstflag);
 

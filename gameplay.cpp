@@ -80,7 +80,6 @@ void gameplay::labelclicked(){
 
 void gameplay::on_bt_clicked()
 {
-    QMessageBox :: information(this, "title", "0 player");
     deleteIntro();
 
     this->gb->playerNum = 0;
@@ -90,10 +89,17 @@ void gameplay::on_bt_clicked()
 
 void gameplay::on_bt_2_clicked()
 {
-    QMessageBox :: information(this, "title", "1 player");
     deleteIntro();
 
     this->gb->playerNum = 1;
+    this->play(this->gb);
+}
+
+void gameplay::on_bt_3_clicked()
+{
+    deleteIntro();
+
+    this->gb->playerNum = 2;
     this->play(this->gb);
 }
 
@@ -230,9 +236,13 @@ void gameplay::startGame(GameBoard *game) {
         QMessageBox :: information(this, "result", "Tie game. ");
     }
     string s;
-    cout << "Play again? (Y or N)" << endl;
-    cin >> s;
-    if (s == "Y") {
+//    cout << "Play again? (Y or N)" << endl;
+//    cin >> s;
+
+    QMessageBox::StandardButton reply;
+      reply = QMessageBox::question(this, "Message", "Play again?",
+                                    QMessageBox::Yes|QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
         game->totalct = 4;
         makeBoard(game, 0, false);
         cout << "STARTING OVER" << endl;
@@ -240,7 +250,7 @@ void gameplay::startGame(GameBoard *game) {
         this->printBoard(game, 0);
         startGame(game);
     } else {
-        cout << "THANKS FOR PLAYING!" << endl;
+        QMessageBox :: information(this, "Message", "THANKS FOR PLAYING!");
     }
 }
 
@@ -317,6 +327,8 @@ void gameplay::playGame(bool fp1, bool fp2, GameBoard *game, bool whoplaysfirstf
     playGame(fp1, fp2, game, whoplaysfirstflag);
 
 }
+
+
 
 
 
