@@ -67,7 +67,7 @@ void delay()
 {
     QTime dieTime= QTime::currentTime().addSecs(1);
     while (QTime::currentTime() < dieTime)
-        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 1);
 }
 
 void gameplay::labelclicked(){
@@ -179,7 +179,6 @@ bool gameplay::placepieceperson(GameBoard *game) {
         return false;
     }
     int num = flipPieceNum(game, x, y, true);
-    cout << num << endl;
 
     if (num == 0) {
         cout << game->p << " forfeits turn" << endl;
@@ -219,9 +218,16 @@ void gameplay::startGame(GameBoard *game) {
         playGame(true, true, game, true);
     char w = ckwin(game);
     if (w != 'T') {
-        cout << w << " WON!!!!  " << endl;
+
+         if(w == 'O')
+         QMessageBox :: information(this, "result", "WHITE WON!!!!  ");
+
+         if(w == 'X' )
+         QMessageBox :: information(this, "result", "BLACK WON!!!!  ");
+
+
     } else {
-        cout << "Tie game. " << endl;
+        QMessageBox :: information(this, "result", "Tie game. ");
     }
     string s;
     cout << "Play again? (Y or N)" << endl;
